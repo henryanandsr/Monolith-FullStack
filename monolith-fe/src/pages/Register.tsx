@@ -28,7 +28,7 @@ const Register = () => {
     }
     try {
       console.log(formData)
-      const response = await axios.post('http://localhost:8001/api/register', formData);
+      const response = await axios.post('https://merciful-nose-production.up.railway.app/api/register', formData);
       console.log(response.data);
       setSuccess('User registered successfully');
       setError(null); 

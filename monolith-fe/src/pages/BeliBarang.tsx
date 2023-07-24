@@ -33,7 +33,7 @@ const BeliBarang = () => {
             quantity: quantity,
         };
 
-        axios.post('http://localhost:8001/api/barang/create', orderData, {
+        axios.post('https://merciful-nose-production.up.railway.app/api/barang/create', orderData, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
             },

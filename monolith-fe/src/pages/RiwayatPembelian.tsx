@@ -19,7 +19,7 @@ const RiwayatPembelian = () => {
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     console.log('Retrieved token:', token)
-    axios.get('http://127.0.0.1:8001/api/orders/user', {
+    axios.get('https://merciful-nose-production.up.railway.app/api/orders/user', {
       headers: {
         Authorization: `Bearer ${token}`
       }
