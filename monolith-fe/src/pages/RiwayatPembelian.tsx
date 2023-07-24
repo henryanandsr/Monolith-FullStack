@@ -26,7 +26,6 @@ const RiwayatPembelian = () => {
     })
     .then(async response => {
       const purchasesData = response.data.data;
-
       // Fetch detail product from single service
       const purchasesWithProductDetails = await Promise.all(purchasesData.map(async (purchase: Purchase) => {
         const productResponse = await axios.get(`http://localhost:8080/barang/${purchase.product_id}`,{withCredentials: false});
