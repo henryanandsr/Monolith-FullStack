@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const KatalogBarang = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(10); // Number of products to display per page
+  const [productsPerPage] = useState(10);
   const [barangs, setBarangs] = useState<Barang[]>([]);
   type Barang = {
     id: string,
