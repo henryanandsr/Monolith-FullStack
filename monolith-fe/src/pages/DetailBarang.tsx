@@ -12,7 +12,7 @@ const DetailBarang = () => {
     stok: number
   }
   useEffect(() => {
-    axios.get(`http://localhost:8080/barang/${id}`, {withCredentials: false})
+    axios.get(`https://singleservice-labpro-production.up.railway.app/barang/${id}`, {withCredentials: false})
       .then(response => {
         setBarang(response.data.data);
         console.log(response.data.data);

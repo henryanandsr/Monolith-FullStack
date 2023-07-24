@@ -13,7 +13,7 @@ const BeliBarang = () => {
     stok: number
   }
   useEffect(() => {
-    axios.get(`http://localhost:8080/barang/${id}`, {withCredentials: false})
+    axios.get(`https://singleservice-labpro-production.up.railway.app/barang/${id}`, {withCredentials: false})
       .then(response => {
         setBarang(response.data.data);
         console.log(response.data.data);
@@ -48,7 +48,7 @@ const BeliBarang = () => {
             });
         // update stock in http://localhost:8080/barang/{id}
         const newStock = barang.stok - quantity;
-        axios.put(`http://localhost:8080/barang/stok/${id}`, {stok: newStock}, {withCredentials: false})
+        axios.put(`https://singleservice-labpro-production.up.railway.app/barang/stok/${id}`, {stok: newStock}, {withCredentials: false})
             .then(response => {
                 console.log(response);
             })

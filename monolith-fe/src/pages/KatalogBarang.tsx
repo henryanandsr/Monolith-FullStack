@@ -14,7 +14,7 @@ const KatalogBarang = () => {
   }
   useEffect(() => {
     console.log("benar")
-    axios.get('http://localhost:8080/barang', {withCredentials: false})
+    axios.get('https://singleservice-labpro-production.up.railway.app/barang', {withCredentials: false})
       .then(response => {
         setBarangs(response.data.data);
         console.log(response.data.data); // log the received data
