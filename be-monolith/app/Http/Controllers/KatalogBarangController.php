@@ -52,4 +52,23 @@ class KatalogBarangController extends Controller
 
         return view('detail_barang', compact('barang'));
     }
+    public function beliBarang($id)
+{
+    $response = Http::get('https://singleservice-labpro-production.up.railway.app/barang/' . $id);
+
+    if (!$response->successful()) {
+        return response()->json(['error' => 'GET request failed'], 500);
+    }
+
+    // Decode the JSON response
+    $responseData = $response->json();
+
+    // Get the 'data' from the response
+    $barang = $responseData['data'];
+    $quantity = 1;
+    $totalCost = $barang['harga'] * $quantity;
+
+    return view('beli_barang', compact('barang', 'quantity', 'totalCost'));
+}
+
 }
