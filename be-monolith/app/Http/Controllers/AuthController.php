@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Pengguna;
 
 class AuthController extends Controller
 {
@@ -22,15 +24,15 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
+    public function login(Request $request)
     {
-        $credentials = request(['email', 'password']);
+        $credentials = $request->only('email', 'password');
 
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if ($token = auth()->attempt($credentials)) {
+            return redirect()->route('katalog.barang')->withCookie(cookie('token', $token, 60)); // 60 mnt
         }
 
-        return $this->respondWithToken($token);
+        return redirect()->back()->withInput()->withErrors(['email' => 'Invalid login credentials']);
     }
 
     /**
@@ -40,7 +42,8 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        $user = Pengguna::where('api_token', session('token'))->first();
+        return response()->json($user);
     }
 
     /**
@@ -62,7 +65,7 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
+        //
     }
 
     /**
@@ -77,7 +80,7 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => auth()->factory()->getTTL()*60,
         ]);
     }
 }

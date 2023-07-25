@@ -9,13 +9,14 @@ use App\Models\Pengguna;
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\TryCatch;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\Validator;
 
 class PenggunaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    
     public function index()
     {
         $data = Pengguna::all();
@@ -31,7 +32,7 @@ class PenggunaController extends Controller
      */
     public function create()
     {
-        //
+        return view('register');
     }
 
     /**
@@ -39,29 +40,30 @@ class PenggunaController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info($request->all());
-        try{
-            $request->validate([
-                'username' => 'required|unique:pengguna',
-                'email' => 'required|unique:pengguna',
-                'password' => 'required',
-                'first_name' => 'required',
-                'last_name' => 'required',
-            ]);
-            $penggunaData = $request->all();
-            $penggunaData['password'] = Hash::make($penggunaData['password']);
-                        
-            $pengguna = Pengguna::create($penggunaData);
-            $data = Pengguna::where('id', '=', $pengguna->id)->get();
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|unique:pengguna',
+            'email' => 'required|unique:pengguna',
+            'password' => 'required|min:8',
+            'first_name' => 'required',
+            'last_name' => 'required',
+        ]);
 
-            if ($pengguna) {
-                return Formatter::createApi(201, 'Data berhasil ditambahkan', $data);
-            } else {
-                return Formatter::createApi(400, 'Data gagal ditambahkan');
-            }
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
         }
-        catch(\Exception $e){
-            return Formatter::createApi(400, 'Terjadi kesalahan');
+
+        $penggunaData = $request->all();
+        $penggunaData['password'] = Hash::make($penggunaData['password']);
+
+        try {
+            $pengguna = Pengguna::create($penggunaData);
+            if ($pengguna) {
+                return redirect()->route('login')->with('success', 'User registered successfully');
+            } else {
+                return redirect()->back()->with('error', 'Data gagal ditambahkan');
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan');
         }
     }
 
