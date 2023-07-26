@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+if ($this->app->environment('production') && request()->getScheme() !== 'https') {
+    URL::forceScheme('https');
+}
 Route::get('/pengguna', 'App\Http\Controllers\API\PenggunaController@index');
 Route::get('/barang', 'App\Http\Controllers\API\OrdersController@index');
 Route::post('/register', 'App\Http\Controllers\API\PenggunaController@store');
