@@ -4,32 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Katalog Barang</title>
-    <!-- Include Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container p-4 m-4">
+    @include('_navbar')
+    <div class="container p-4 ">
         <h1 class="text-center text-2xl font-bold pb-4">Katalog Barang</h1>
         @foreach ($barangs as $barang)
-            <div class="bg-blue-200 my-3 p-2 rounded-md">
-                <h2 class="text-xl font-bold">{{ $barang['nama'] }}</h2>
-                <p>Harga : {{ $barang['harga'] }}</p>
-                <p>Stock : {{ $barang['stok'] }}</p>
-                <a href="/barang/{{ $barang['id'] }}" class="text-blue-600">Detail</a>
+            <div class="container p-4 m-4 bg-blue-50 rounded-lg shadow-md">
+                <div class="flex justify-between">
+                    <div>
+                        <h2 class="text-gray-700 font-bold text-xl">{{ $barang['nama'] }}</h2>
+                        <p>Harga : Rp {{ $barang['harga'] }}</p>
+                        <p>Stock : {{ $barang['stok'] }}</p>
+                    </div>
+                    <div>
+                        <a href="/barang/{{ $barang['id'] }}" class="font-bold text-blue-500">Detail</a>
+                    </div>
+                </div>
             </div>
         @endforeach
 
         <!-- Pagination -->
         <div>
             @for ($i = 1; $i <= ceil(count($barangs) / $productsPerPage); $i++)
-                <button onclick="paginate({{ $i }})">{{ $i }}</button>
+                <button onclick="paginate({{ $i }})" class="bg-blue-500 text-white px-4 py-2 rounded-md">{{ $i }}</button>
             @endfor
         </div>
     </div>
-
-    <!-- Include Bootstrap JS and jQuery (required for Bootstrap) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         function paginate(pageNumber) {
