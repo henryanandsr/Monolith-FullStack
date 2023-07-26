@@ -5,7 +5,6 @@ use App\Http\Controllers\API\PenggunaController;
 use App\Http\Controllers\API\OrdersController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KatalogBarangController;
-use Illuminate\Support\Facades\URL;
 
 
 /*
@@ -23,9 +22,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-if ($this->app->environment('production') && request()->getScheme() !== 'https') {
-    URL::forceScheme('https');
-}
 Route::get('/register', [PenggunaController::class, 'create'])->name('register');
 Route::post('/register', [PenggunaController::class, 'store'])->name('register.store');
 
