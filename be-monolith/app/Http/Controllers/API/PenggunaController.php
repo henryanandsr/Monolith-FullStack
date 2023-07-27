@@ -8,24 +8,32 @@ use App\Helpers\Formatter;
 use App\Models\Pengguna;
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\TryCatch;
+use App\Repositories\Interfaces\PenggunaRepositoryInterface;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class PenggunaController extends Controller
 {
+    protected $penggunaRepository;
+
+    public function __construct(PenggunaRepositoryInterface $penggunaRepository)
+    {
+        $this->penggunaRepository = $penggunaRepository;
+    }
+
     /**
      * Display a listing of the resource.
      */
-    
     public function index()
     {
-        $data = Pengguna::all();
+        $data = $this->penggunaRepository->all();
         if ($data) {
             return Formatter::createApi(200, 'Data ditemukan', $data);
         } else {
             return Formatter::createApi(404, 'Data tidak ditemukan');
         }
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -53,10 +61,8 @@ class PenggunaController extends Controller
         }
 
         $penggunaData = $request->all();
-        $penggunaData['password'] = Hash::make($penggunaData['password']);
-
         try {
-            $pengguna = Pengguna::create($penggunaData);
+            $pengguna = $this->penggunaRepository->create($penggunaData);
             if ($pengguna) {
                 return redirect()->route('login')->with('success', 'User registered successfully');
             } else {

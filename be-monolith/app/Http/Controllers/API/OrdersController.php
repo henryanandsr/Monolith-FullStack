@@ -5,19 +5,26 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Helpers\Formatter;
-use App\Models\Orders;
+use App\Repositories\Interfaces\OrdersRepositoryInterface;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Client;
 
 class OrdersController extends Controller
 {
+    protected $orders;
+
+    public function __construct(OrdersRepositoryInterface $orders)
+    {
+        $this->orders = $orders;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $data = Orders::all();
+        $data = $this->orders->all();
         if ($data) {
             return Formatter::createApi(200, 'Data ditemukan', $data);
         } else {
@@ -32,10 +39,11 @@ class OrdersController extends Controller
     {
         //
     }
+
     public function getAuthenticatedUserOrders(Request $request)
     {
         $userId = $request->user()->id;
-        $data = Orders::where('user_id', $userId)->paginate(10);
+        $data = $this->orders->getByUserId($userId);
 
         $httpClient = new Client();
         $productMap = [];
@@ -64,6 +72,7 @@ class OrdersController extends Controller
                 }
             }
         }
+
         Log::info('Product map:', ['product_map' => $productMap]);
         Log::info('Purchases:', ['purchases' => $data]);
         return view('riwayat_pembelian', ['purchases' => $data, 'productMap' => $productMap]);
@@ -99,14 +108,11 @@ class OrdersController extends Controller
         }
     
         // Create a new Order instance and fill it with the request data
-        $order = new Orders([
+        $order = $this->orders->create([
             'user_id' => auth()->id(),
             'product_id' => $request->product_id,
             'quantity' => $quantity,
         ]);
-    
-        // Save the order to the database
-        $order->save();
     
         // Update the stock quantity of the Barang
         $barang->stok -= $quantity;
@@ -128,7 +134,6 @@ class OrdersController extends Controller
         // Redirect back to a success page or wherever you want
         return redirect()->route('katalog.barang')->with('success', 'Pembelian berhasil');
     }
-    
 
     /**
      * Display the specified resource.
