@@ -8,28 +8,30 @@
 </head>
 <body>
     @include('_navbar')
-    <div class="container p-4 ">
-        <h1 class="text-center text-2xl font-bold pb-4">Katalog Barang</h1>
-        @foreach ($barangs as $barang)
-            <div class="container p-4 m-4 bg-blue-50 rounded-lg shadow-md">
-                <div class="flex justify-between">
-                    <div>
-                        <h2 class="text-gray-700 font-bold text-xl">{{ $barang['nama'] }}</h2>
-                        <p>Harga : Rp {{ $barang['harga'] }}</p>
-                        <p>Stock : {{ $barang['stok'] }}</p>
-                    </div>
-                    <div>
-                        <a href="/barang/{{ $barang['id'] }}" class="font-bold text-blue-500">Detail</a>
+    <div class="p-4">
+        <div class="container">
+            <h1 class="text-center text-2xl font-bold pb-4">Katalog Barang</h1>
+            @foreach ($barangs as $barang)
+                <div class="p-4 m-4 bg-blue-50 rounded-lg shadow-md">
+                    <div class="flex justify-between">
+                        <div>
+                            <h2 class="text-gray-700 font-bold text-xl">{{ $barang['nama'] }}</h2>
+                            <p>Harga : Rp {{ $barang['harga'] }}</p>
+                            <p>Stock : {{ $barang['stok'] }}</p>
+                        </div>
+                        <div>
+                            <a href="/barang/{{ $barang['id'] }}" class="font-bold text-blue-500">Detail</a>
+                        </div>
                     </div>
                 </div>
+            @endforeach
+    
+            <!-- Pagination -->
+            <div>
+                @for ($i = 1; $i <= ceil(count($barangs) / $productsPerPage); $i++)
+                    <button onclick="paginate({{ $i }})" class="bg-blue-500 text-white px-4 py-2 rounded-md">{{ $i }}</button>
+                @endfor
             </div>
-        @endforeach
-
-        <!-- Pagination -->
-        <div>
-            @for ($i = 1; $i <= ceil(count($barangs) / $productsPerPage); $i++)
-                <button onclick="paginate({{ $i }})" class="bg-blue-500 text-white px-4 py-2 rounded-md">{{ $i }}</button>
-            @endfor
         </div>
     </div>
 
