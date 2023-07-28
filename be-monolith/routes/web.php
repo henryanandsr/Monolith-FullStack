@@ -5,6 +5,7 @@ use App\Http\Controllers\API\PenggunaController;
 use App\Http\Controllers\API\OrdersController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KatalogBarangController;
+use Illuminate\Support\Facades\URL;
 
 
 /*
@@ -34,3 +35,4 @@ Route::get('/barang/{id}', [KatalogBarangController::class, 'detailBarang'])->na
 Route::get('/beli/{id}', [KatalogBarangController::class, 'beliBarang'])->name('beli.barang');
 Route::post('/orders', [OrdersController::class, 'store'])->middleware('auth')->name('orders.store');
 Route::get('/riwayat-pembelian', [OrdersController::class, 'getAuthenticatedUserOrders'])->middleware('auth')->name('riwayat_pembelian');
+URL::forceScheme('https');
