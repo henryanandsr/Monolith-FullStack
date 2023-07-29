@@ -15,7 +15,7 @@
             <p class="text-gray-700 mb-3">Stok: <span id="stok"><?= $barang['stok'] ?></span></p>
             <p class="text-gray-700 mb-3">Total: Rp <span id="totalCost"><?= $totalCost ?></span></p>
             <div class="mb-2">
-                <label class="block">Jumlah:</label>
+                <label for="quantity" class="block">Jumlah:</label>
                 <input
                     id="quantity"
                     type="number"
