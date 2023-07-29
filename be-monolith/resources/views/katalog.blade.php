@@ -11,6 +11,10 @@
     <div class="p-4">
         <div class="container">
             <h1 class="text-center text-2xl font-bold pb-4">Katalog Barang</h1>
+            <form action="/katalog-barang" method="GET" class="w-full flex flex-col md:flex-row md:items-center p-4">
+                <input type="text" name="search" placeholder="Search by nama barang" class="px-3 py-2 border rounded-md w-full md:mr-2 mb-2 md:mb-0">
+                <button type="submit" class="bg-blue-500 text-white px-3 py-2 rounded-md w-full md:w-auto">Search</button>
+            </form>
             @foreach ($barangs as $barang)
                 <div class="p-4 m-4 bg-blue-50 rounded-lg shadow-md">
                     <div class="flex justify-between">

@@ -4,9 +4,20 @@ namespace App\Repositories\Eloquent;
 
 use App\Repositories\Interfaces\BarangRepositoryInterface;
 use Illuminate\Support\Facades\Http;
+use App\Models\Barang;
 
 class BarangRepository implements BarangRepositoryInterface
 {
+    public function searchByName($name)
+    {
+        $barangs = $this->getAll();
+    
+        $filteredBarangs = array_filter($barangs, function($barang) use ($name) {
+            return stripos($barang['nama'], $name) !== false; 
+        });
+    
+        return array_values($filteredBarangs);
+    }
     public function getAll()
     {
         $response = Http::get('https://singleservice-labpro-production.up.railway.app/barang');

@@ -17,7 +17,11 @@ class KatalogBarangController extends Controller
         $currentPage = request('page', 1);
         $productsPerPage = 10;
 
-        $barangs = $this->barang->getAll();
+        if ($search = request('search')) {
+            $barangs = $this->barang->searchByName($search);
+        } else {
+            $barangs = $this->barang->getAll();
+        }
 
         $indexOfLastProduct = $currentPage * $productsPerPage;
         $indexOfFirstProduct = $indexOfLastProduct - $productsPerPage;
