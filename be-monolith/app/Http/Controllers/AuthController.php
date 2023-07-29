@@ -26,13 +26,17 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only('email_or_username', 'password');
 
-        if ($token = auth()->attempt($credentials)) {
-            return redirect()->route('katalog.barang')->withCookie(cookie('token', $token, 60)); // 60 mnt
+        if (filter_var($credentials['email_or_username'], FILTER_VALIDATE_EMAIL)) {
+            $credentials['email'] = $credentials['email_or_username'];
+            unset($credentials['email_or_username']);
         }
-
-        return redirect()->back()->withInput()->withErrors(['email' => 'Invalid login credentials']);
+    
+        if ($token = Auth::attempt($credentials)) {
+            return redirect()->route('katalog.barang')->withCookie(cookie('token', $token, 60));
+        }
+        return redirect()->back()->withInput()->withErrors(['email_or_username' => 'Invalid login credentials']);
     }
 
     /**
