@@ -28,16 +28,28 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email_or_username', 'password');
 
+        // Determine if email_or_username is an email or username
         if (filter_var($credentials['email_or_username'], FILTER_VALIDATE_EMAIL)) {
-            $credentials['email'] = $credentials['email_or_username'];
-            unset($credentials['email_or_username']);
+            // User input is an email
+            $credentials = [
+                'email' => $credentials['email_or_username'],
+                'password' => $credentials['password']
+            ];
+        } else {
+            // User input is a username
+            $credentials = [
+                'username' => $credentials['email_or_username'],
+                'password' => $credentials['password']
+            ];
         }
-    
+
         if ($token = Auth::attempt($credentials)) {
             return redirect()->route('katalog.barang')->withCookie(cookie('token', $token, 60));
         }
+
         return redirect()->back()->withInput()->withErrors(['email_or_username' => 'Invalid login credentials']);
     }
+
 
     /**
      * Get the authenticated User.
