@@ -11,7 +11,7 @@
     <div class="p-4">
         <div class="container">
             <h1 class="text-center text-2xl font-bold pb-4">Katalog Barang</h1>
-            <form action="/katalog-barang" method="GET" class="w-full flex flex-col md:flex-row md:items-center p-4">
+            <form id="searchForm" class="w-full flex flex-col md:flex-row md:items-center p-4">
                 <input type="text" name="search" placeholder="Search by nama barang" class="px-3 py-2 border rounded-md w-full md:mr-2 mb-2 md:mb-0">
                 <button type="submit" class="bg-blue-500 text-white px-3 py-2 rounded-md w-full md:w-auto">Search</button>
             </form>
@@ -42,6 +42,23 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         var currentPage = 1;
+        var searchTerm = "";
+        var refreshInterval;
+        var isSearchActive = false;
+
+        function startRefresh() {
+            clearInterval(refreshInterval); 
+            if (!isSearchActive) {
+                refreshInterval = setInterval(refreshData, 1000); 
+            }
+        }
+
+        $('#searchForm').submit(function(e) {
+            e.preventDefault();
+            isSearchActive = true; // set flag
+            searchTerm = $('input[name="search"]').val();
+            refreshData();
+        });
 
         function paginate(pageNumber) {
             currentPage = pageNumber;
@@ -49,7 +66,8 @@
         }
 
         function refreshData() {
-            $.get('/katalog-barang?page=' + currentPage, function(data) {
+            clearInterval(refreshInterval);
+            $.get('/katalog-barang?page=' + currentPage + '&search=' + searchTerm, function(data) {
                 $('#barangs').empty();
                 $('#pagination').empty();
 
@@ -73,10 +91,12 @@
                 for (var i = 1; i <= data.pages; i++) {
                     $('#pagination').append(`<button onclick="paginate(${i})" class="bg-blue-500 text-white px-4 py-2 rounded-md">${i}</button>`);
                 }
+
+                isSearchActive = false; 
+                startRefresh(); 
             });
         }
-
-        setInterval(refreshData, 1000);
+        startRefresh();
     </script>
 </body>
 </html>
