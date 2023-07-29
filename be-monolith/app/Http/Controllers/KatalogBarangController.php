@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Repositories\Interfaces\BarangRepositoryInterface;
@@ -26,6 +27,13 @@ class KatalogBarangController extends Controller
         $indexOfLastProduct = $currentPage * $productsPerPage;
         $indexOfFirstProduct = $indexOfLastProduct - $productsPerPage;
         $currentProducts = array_slice($barangs, $indexOfFirstProduct, $productsPerPage);
+
+        if (request()->ajax()) {
+            return response()->json([
+                'barangs' => $currentProducts,
+                'pages' => ceil(count($barangs) / $productsPerPage),
+            ]);
+        }
 
         return view('katalog', ['barangs' => $barangs, 'productsPerPage' => $productsPerPage]);
     }
