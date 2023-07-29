@@ -14,8 +14,8 @@
         <form action="{{ route('login.submit') }}" method="post">
             @csrf
             <div class="mb-5">
-                <label for="email" class="block text-gray-700 font-bold">Email:</label>
-                <input type="email" class="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500" id="email" name="email" required>
+                <label for="email_or_username" class="block text-gray-700 font-bold">Email or Username:</label>
+                <input type="text" class="w-full px-4 py-2 rounded border border-gray-300 focus:outline-none focus:border-blue-500" id="email_or_username" name="email_or_username" required>
             </div>
             <div class="mb-5">
                 <label for="password" class="block text-gray-700 font-bold">Password:</label>
